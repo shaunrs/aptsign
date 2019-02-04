@@ -6,6 +6,7 @@ jobs:
     steps:
       - checkout
       - run: mkdir /tmp/results/
+      - run: pip install -r requirements.test.txt
       - run: tox
       - store_artifacts:
           path: /tmp/results/
