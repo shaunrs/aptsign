@@ -1,0 +1,21 @@
+repositories:
+  testfilter_site:
+    filter:
+      site: 'testrepo.org'
+    app: 'debsig-verify -d'
+  testfilter_multi_match:
+    filter:
+      component: 'main'
+      archive: 'testing'
+      origin: 'Debian'
+      site: 'testrepo.org'
+      label: 'Debian'
+    app: 'dpkg-verify'
+  testfilter_multi_nomatch:
+    filter:
+      component: 'contrib'
+      archive: 'stable'
+      origin: 'Other'
+      site: 'otherrepo.org'
+      label: 'other'
+    app: 'dpkg-verify'

@@ -1,0 +1,5 @@
+repositories:
+  my_example_repo:
+    filter:
+      site: "myrepo.example"
+    app: "debsig-verify -d"
