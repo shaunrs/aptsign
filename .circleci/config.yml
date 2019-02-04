@@ -5,8 +5,11 @@ jobs:
       - image: circleci/python:3.6
     steps:
       - checkout
-      - run: mkdir /tmp/results/
+      - run: sudo apt-get update && apt-get install ruby ruby-dev rubygems build-essential
+      - run: sudo gem install --no-ri --no-rdoc fpm
+      - run: mkdir /tmp/artifacts/
       - run: sudo pip install -r requirements.test.txt
       - run: tox
+      - run: fpm --verbose --python-bin /usr/bin/python3.6 --python-install-data / -s python -t deb ./
       - store_artifacts:
-          path: /tmp/results/
+          path: /tmp/artifacts/
