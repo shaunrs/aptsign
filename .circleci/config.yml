@@ -11,6 +11,6 @@ jobs:
       - run: mkdir /tmp/artifacts/
       - run: sudo pip install -r requirements.test.txt
       - run: tox
-      - run: fpm --verbose --python-bin /usr/bin/python3 --python-install-data / -p /tmp/artifacts/ -s python -t deb ./
+      - run: fpm --verbose --python-bin /usr/bin/python3 --python-install-data / --python-package-name-prefix python3 -d python3-yaml --python-disable-dependency pyyaml -p /tmp -s python -t deb ./
       - store_artifacts:
           path: /tmp/artifacts/

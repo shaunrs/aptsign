@@ -18,7 +18,12 @@ setup(
         "pyyaml",
     ],
     data_files=[
-        ('etc', ["etc/aptsign.yml.example",]),
-        ('etc/apt/apt.conf.d', ["etc/60aptsign"])
+        ('etc', [
+            "etc/aptsign.yml.example",
+            "etc/aptsign.yml"
+        ]),
+        ('etc/apt/apt.conf.d', [
+            "etc/60aptsign",
+        ])
     ]
 )
