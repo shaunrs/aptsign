@@ -6,6 +6,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt-get update && sudo apt-get install ruby ruby-dev rubygems build-essential
+      - run: sudo apt-get install python3-pip
       - run: sudo gem install --no-ri --no-rdoc fpm
       - run: mkdir /tmp/artifacts/
       - run: sudo pip install -r requirements.test.txt
