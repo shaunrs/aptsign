@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/shaunrs/aptsign.svg?style=svg&circle-token=e7e0d88aaa9fb6d716c347203c3f2af81e1e717f)](https://circleci.com/gh/shaunrs/aptsign)
+
 # Apt Signature Verification
 
 Conditional signature verification for apt.
@@ -5,8 +7,6 @@ Conditional signature verification for apt.
 ## Why this tool exists
 
 ### The threat
-
-[diagram?]
 
 Take the following scenario:
 1. We produce our own deb packages to distribute to servers
