@@ -1,4 +1,6 @@
 import sys
+from copy import deepcopy
+
 import yaml
 
 import mock
@@ -80,9 +82,24 @@ def mock_apt_package(mock_apt_origin_local, mock_apt_origin_remote):
 
 
 @pytest.fixture
-def mock_apt_cache(mock_apt_package):
+def mock_apt_package_encoded(mock_apt_package):
+    package = deepcopy(mock_apt_package)
+
+    package.package.name = 'encodedpackage'
+    package.version = '3:6.03+dfsg-14.1+deb9u1'
+
+    package.versions = {
+        '3:6.03+dfsg-14.1+deb9u1': package
+    }
+
+    return package
+
+
+@pytest.fixture
+def mock_apt_cache(mock_apt_package, mock_apt_package_encoded):
     cache = {
-        'mypackage': mock_apt_package
+        'mypackage': mock_apt_package,
+        'encodedpackage': mock_apt_package_encoded
     }
 
     return cache
