@@ -11,9 +11,9 @@ class TestCli:
 
     def test_valid_package_filename(self, fixture_configuration, mock_apt_cache, mocker):
         mock_subprocess = mocker.patch('subprocess.check_output')
-        mocker.patch('apt.Cache', return_value=mock_apt_cache)
+        # mock_cache = mocker.patch('apt.Cache', return_value=mock_apt_cache)
 
-        cli.process_package(fixture_configuration, self.PACKAGE_FILENAME_VALID)
+        cli.process_package(fixture_configuration, self.PACKAGE_FILENAME_VALID, mock_apt_cache)
 
         mock_subprocess.assert_called_once_with(
             ['debsig-verify', '-d', self.PACKAGE_FILENAME_VALID],
@@ -22,33 +22,37 @@ class TestCli:
 
     def test_invalid_package_filename(self, fixture_configuration, mock_apt_cache, mocker):
         mock_subprocess = mocker.patch('subprocess.check_output')
-        mocker.patch('apt.Cache', return_value=mock_apt_cache)
+        # mock_cache = mocker.patch('apt.Cache', return_value=mock_apt_cache)
 
         with pytest.raises(PackageNotFound):
-            cli.process_package(fixture_configuration, self.PACKAGE_FILENAME_INVALID)
+            cli.process_package(
+                fixture_configuration, self.PACKAGE_FILENAME_INVALID, mock_apt_cache
+            )
 
         mock_subprocess.assert_not_called()
 
     def test_signature_verification_failed(self, fixture_configuration, mock_apt_cache, mocker):
         mock_subprocess = mocker.patch('subprocess.check_output')
-        mocker.patch('apt.Cache', return_value=mock_apt_cache)
+        # mock_cache = mocker.patch('apt.Cache', return_value=mock_apt_cache)
 
         mock_subprocess.side_effect = subprocess.CalledProcessError(2, 'test')
         mock_subprocess.side_effect.return_code = 2
 
         with pytest.raises(SystemExit) as exit_exception:
-            cli.process_package(fixture_configuration, self.PACKAGE_FILENAME_VALID)
+            cli.process_package(
+                fixture_configuration, self.PACKAGE_FILENAME_VALID, mock_apt_cache
+            )
 
         assert exit_exception.value.code == 2
 
-    def test_no_package_filter(self, mocker):
-        mocker.patch('subprocess.check_output')
+    def test_no_package_filter(self, mock_apt_cache, mocker):
+        mock_subprocess = mocker.patch('subprocess.check_output')
+        # mock_cache = mocker.patch('apt.Cache', return_value=mock_apt_cache)
 
         config = {
             'repositories': {}
         }
 
-        with pytest.raises(SystemExit) as exit_exception:
-            cli.process_package(config, self.PACKAGE_FILENAME_VALID)
+        cli.process_package(config, self.PACKAGE_FILENAME_VALID, mock_apt_cache)
 
-        assert exit_exception.value.code == 0
+        mock_subprocess.assert_not_called()

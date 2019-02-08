@@ -13,18 +13,20 @@ def verify():
     # install gives filename
     input_filenames = []
 
-    for line in sys.stdin.readlines():
+    for line in sys.stdin:
         input_filenames.append(line.strip())
 
     with open('/etc/aptsign.yml') as _file:
         config = yaml.load(_file)
 
-    for filename in input_filenames:
-        process_package(config, filename)
-
-
-def process_package(config, filename):
     cache = apt.Cache()
+
+    for filename in input_filenames:
+        process_package(config, filename, cache)
+
+
+def process_package(config, filename, cache):
+    print("DEBUG: Filename: {}".format(filename))
 
     pkg = Package(cache)
 
@@ -32,7 +34,6 @@ def process_package(config, filename):
     # dpkg should not continue if we are unable to verify the package
     pkg.by_filename(filename)
 
-    print("DEBUG: Filename: {}".format(filename))
     print("DEBUG: Package name: {}".format(pkg))
 
     # Generate the filters from configuration file
@@ -47,7 +48,7 @@ def process_package(config, filename):
     # If there was no match found, ignore this package
     if not package_filter:
         print("No filter found, skipping signature checks..")
-        sys.exit(0)
+        return
 
     print("DEBUG: Matched filter: \"{}\"".format(package_filter))
     print("Validating signatures for {} using '{}'".format(pkg, package_filter.app))
