@@ -52,3 +52,17 @@ class TestPackage:
 
     def test_string_method(self, fixture_package):
         assert str(fixture_package) == "mypackage-1.0.1"
+
+    def test_encoded_filename(self, mock_apt_cache):
+        """
+        Ensure that we can locate urlencoded filenames in apt cache
+        """
+        package = Package(mock_apt_cache)
+
+        package.by_filename(
+            '/var/cache/apt/archive/encodedpackage_3%3a6.03+dfsg-14.1+deb9u1_amd64.deb'
+        )
+
+        assert package.name == 'encodedpackage'
+        assert package.version == '3:6.03+dfsg-14.1+deb9u1'
+        assert package.arch == 'amd64'
