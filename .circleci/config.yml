@@ -14,6 +14,6 @@ jobs:
       - run: fpm --verbose --python-package-name-prefix python3 --python-bin /usr/bin/python3 \
              --python-install-data / --python-install-lib /usr/lib/python3/dist-packages/ \
              --python-install-bin /usr/bin/ -p /tmp/artifacts/ -s python -t deb -d python3-yaml \
-             -d python3-setuptools -d python3-apt --python-disable-dependency pyyaml ./
+             -d python3-setuptools -d python3-apt -d debsig-verify --python-disable-dependency pyyaml ./
       - store_artifacts:
           path: /tmp/artifacts/
