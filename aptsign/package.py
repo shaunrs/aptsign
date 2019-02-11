@@ -1,4 +1,5 @@
 import os.path
+import urllib.parse
 
 from typing import Optional  # noqa
 
@@ -40,11 +41,12 @@ class Package:
         name, version, arch = filename.split('_')
 
         package = self._get_package_from_cache(name)  # type apt.package.Package
-        self.version = version
+
+        self.version = urllib.parse.unquote(version)
         self.arch = arch
 
         try:
-            self._package = package.versions[version]
+            self._package = package.versions[self.version]
         except KeyError:
             raise PackageNotFound("Package {} {} not found in apt cache".format(name, version))
 
