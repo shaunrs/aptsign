@@ -19,7 +19,6 @@ setup(
     ],
     data_files=[
         ('etc', [
-            "etc/aptsign.yml.example",
             "etc/aptsign.yml"
         ]),
         ('etc/apt/apt.conf.d', [
