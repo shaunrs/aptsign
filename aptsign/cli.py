@@ -1,5 +1,7 @@
 import sys
 
+import logging
+
 import subprocess
 import yaml
 
@@ -9,6 +11,8 @@ from aptsign import Package, Filters
 
 
 def verify():
+    logging.basicConfig(format='aptsign %(message)s', level=logging.INFO)
+
     # remove/purge gives nothing on stdin
     # install gives filename
     input_filenames = []
@@ -26,15 +30,15 @@ def verify():
 
 
 def process_package(config, filename, cache):
-    print("DEBUG: Filename: {}".format(filename))
+    logging.debug("Package Filename: %s", filename)
 
     pkg = Package(cache)
 
-    # Allow PackageNotFound to bubbe up
+    # Allow PackageNotFound to bubble up
     # dpkg should not continue if we are unable to verify the package
     pkg.by_filename(filename)
 
-    print("DEBUG: Package name: {}".format(pkg))
+    logging.debug("Package name: %s", pkg)
 
     # Generate the filters from configuration file
     filters = Filters()
@@ -47,17 +51,22 @@ def process_package(config, filename, cache):
 
     # If there was no match found, ignore this package
     if not package_filter:
-        print("No filter found, skipping signature checks..")
+        logging.info("No filter found, skipping signature checks..")
         return
 
-    print("DEBUG: Matched filter: \"{}\"".format(package_filter))
-    print("Validating signatures for {} using '{}'".format(pkg, package_filter.app))
+    logging.info("Matched filter: \"%s\"", package_filter)
+    logging.info("Validating signatures for %s using '%s'", pkg, package_filter.app)
 
     command = "{} {}".format(package_filter.app, pkg.filename)
 
-    print("DEBUG: command '{}'".format(command))
+    logging.debug("Passing to command '%s'", command)
+
     try:
-        subprocess.check_output(command.split(), stderr=subprocess.STDOUT)
+        output = subprocess.check_output(command.split(), stderr=subprocess.STDOUT)
     except subprocess.CalledProcessError as error:
-        print("ERROR: Signature verification check FAILED")
+        logging.error("ERROR: Signature verification check FAILED")
+        logging.error(error.output)
+
         sys.exit(error.returncode)
+    else:
+        logging.info(output)
