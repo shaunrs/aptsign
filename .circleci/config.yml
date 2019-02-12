@@ -5,8 +5,15 @@ jobs:
       - image: circleci/python:3.6
     steps:
       - checkout
-      - run: mkdir /tmp/results/
+      - run: sudo apt-get update && sudo apt-get install ruby ruby-dev rubygems build-essential
+      - run: sudo apt-get install python3-pip
+      - run: sudo gem install --no-ri --no-rdoc fpm
+      - run: mkdir /tmp/artifacts/
       - run: sudo pip install -r requirements.test.txt
       - run: tox
+      - run: fpm --verbose --python-package-name-prefix python3 --python-bin /usr/bin/python3 \
+             --python-install-data / --python-install-lib /usr/lib/python3/dist-packages/ \
+             --python-install-bin /usr/bin/ -p /tmp/artifacts/ -s python -t deb -d python3-yaml \
+             -d python3-setuptools -d python3-apt -d debsig-verify --python-disable-dependency pyyaml ./
       - store_artifacts:
-          path: /tmp/results/
+          path: /tmp/artifacts/
