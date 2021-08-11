@@ -13,10 +13,13 @@ poetry:
 linter:
     FROM +poetry
     RUN poetry run pylint aptsign/ tests/
-
-formatter:
-    FROM +poetry
     RUN poetry run black --diff aptsign/ tests/
+
+format:
+    FROM +poetry
+    RUN poetry run black aptsign/ tests/
+    SAVE ARTIFACT aptsign/ AS LOCAL ./
+    SAVE ARTIFACT tests/ AS LOCAL ./
 
 pytest:
     FROM +poetry
@@ -29,7 +32,6 @@ build:
 
 test:
     BUILD +linter
-    BUILD +formatter
     BUILD +pytest
 
 all:

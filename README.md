@@ -58,9 +58,35 @@ The ideal scenario consists broadly of:
 Hence: aptsign-verify -- conditional signature verification for apt.
 
 
+## Development
+
+This project uses Earthly to perform repeatable builds.
+
+### Testing
+
+`earthly +test`
+
+### Code Formatting
+
+`earthly +format`
+
+### Building
+
+`earthly +build`
+
+Artifacts are dropped into the dist/ directory.
+
+
+### Manual build
+
+```
+pip3 install poetry
+poetry build
+```
+
 ## Installation
 
-`pip install aptsign`
+`pip install .`
 
 
 ## Configuration
