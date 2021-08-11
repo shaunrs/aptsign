@@ -1,5 +1,7 @@
 .tox/
 .mypy_cache/
+.vscode/
+venv/
 .coverage
 __pycache__
 *.egg-info/
