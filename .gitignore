@@ -2,7 +2,9 @@
 .mypy_cache/
 .vscode/
 venv/
+dist/
 .coverage
 __pycache__
 *.egg-info/
 *.pyc
+pytest.xml

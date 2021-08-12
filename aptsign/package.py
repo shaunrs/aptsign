@@ -33,7 +33,7 @@ class Package:
 
     def by_filename(self, filename) -> apt.package.Version:
         """ Select the package from filename, using name and version """
-        self.filename = filename  # type: str
+        self.filename = filename
 
         filename = os.path.basename(filename)
         filename, _ = os.path.splitext(filename)
