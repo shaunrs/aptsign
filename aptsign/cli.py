@@ -21,7 +21,7 @@ def verify():
         input_filenames.append(line.strip())
 
     with open('/etc/aptsign.yml') as _file:
-        config = yaml.load(_file)
+        config = yaml.load(_file, Loader=SafeLoader)
 
     cache = apt.Cache()
 
